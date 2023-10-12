@@ -252,6 +252,7 @@ void analyze_segments(char* sample_segment, char** candidate_segments, int numbe
   int score = 0;
   char outputline_buffer[BUFSIZE] = "\0";
   char int_buffer[BUFSIZE];
+  char score_buffer[BUFSIZE];
 
   /* Hint: Check to see if any candidate segment(s) are a perfect match, and report them
      (REMEMBER: don't ignore trailing nucleotides when searching for a perfect score)
@@ -262,7 +263,7 @@ void analyze_segments(char* sample_segment, char** candidate_segments, int numbe
      e.g. sprintf(int_buffer, "%d", i);
           strcat(outputline_buffer, "Candidate number ");
           strcat(outputline_buffer, int_buffer);
-          strcat(outputline_buffer, " is a perfect match\n");*/
+          strcat(outputline_buffer, " is a perfect match\n");*/     
 
   // Insert your code here
 
@@ -270,13 +271,19 @@ void analyze_segments(char* sample_segment, char** candidate_segments, int numbe
   
   for(i = 0; i <  number_of_candidates; i++){
     if(strcmp(sample_segment, candidate_segments[i])==0){
-      printf("Candidate number %d is a perfect match\n", i+1);
+      sprintf(int_buffer, "%d", i+1);
+      strcat(outputline_buffer, "Candidate number ");
+      strcat(outputline_buffer, int_buffer);
+      strcat(outputline_buffer, " is a perfect match\n");
+      strcat(output_string, outputline_buffer);
     }
     has_perfect_match+=1;
   }
 
-  if(has_perfect_match>0)
+  if(has_perfect_match>0){
     return;
+  }
+
 
   /* Hint: Otherwise we need to calculate and print all of the scores by invoking
      calculate_score for each candidate_segment. Write an output line for each
@@ -285,6 +292,14 @@ void analyze_segments(char* sample_segment, char** candidate_segments, int numbe
   for (i = 0; i < number_of_candidates; i++) {
     score = calculate_score(sample_segment, candidate_segments[i]);
     printf("Candidate number %d matched with a best score of %d\n", i+1, score);
+    sprintf(int_buffer, "%d", i+1);
+    sprintf(score_buffer, "%d", score);
+    strcat(outputline_buffer, "Candidate number ");
+    strcat(outputline_buffer, int_buffer);
+    strcat(outputline_buffer, " matched with a best score of ");
+    strcat(outputline_buffer, score_buffer);
+    strcat(outputline_buffer, "\n");
+    strcat(output_string, outputline_buffer);
   }
 
   /* End of function */
@@ -360,14 +375,17 @@ int calculate_score(char* sample_segment, char* candidate_segment)
           if(sample_segment[j]==candidate_segment[j])
             temp_score+=2;
 
-          else if((sample_segment[j]=="A")||(sample_segment[j]=="T")){
-            if((candidate_segment[j]=="T")||(candidate_segment=="A"))
-              temp_score+=1;
-          }
-          else{
-            if((candidate_segment=="C")||(candidate_segment=="G"))
-              temp_score+=1;
-          }
+          else if ((sample_segment[j]=='A')&&(candidate_segment[j]=='T'))
+            temp_score+=1;
+
+          else if ((sample_segment[j]=='T')&&(candidate_segment[j]=='A'))
+            temp_score+=1;
+          
+          else if ((sample_segment[j]=='C')&&(candidate_segment[j]=='G'))
+            temp_score+=1;
+
+          else if ((sample_segment[j]=='G')&&(candidate_segment[j]=='C'))
+            temp_score+=1;          
         }
       }
     }
