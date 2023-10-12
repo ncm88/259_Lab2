@@ -1,22 +1,3 @@
-/*
- File:        dna.h
- Purpose:     Contains constants, prototypes, and two
-              helpful arrays.
- Author:			Your names
- Student #s:	12345678 and 12345678
- CWLs:	      cwl1 and cwl2
- Date:				Add the date here
- */
-
- /******************************************************************
-  YOU MAY EDIT THIS FILE (but it is not necessary)
-
-  If you add any constants define them in the list of #define
-  statements.
-
-  If you add any functions to the dna.c file, add their prototypes
-  to the list of prototypes.
-  ******************************************************************/
 
 #pragma once
 

@@ -12,18 +12,6 @@
  Date:				Oct 12, 2023
  */
 
- /******************************************************************
-  PLEASE EDIT THIS FILE
-
-  You need to complete the analyze_segments and calculate_score
-  functions.
-
-  You need to understand the entire program
-
-  Comments that start with // should be replaced with code
-  Comments that are surrounded by * are hints
-  ******************************************************************/
-
   /* Preprocessor directives */
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -243,10 +231,6 @@ int extract_dna(FILE* file_pointer, char** sample_segment, char*** candidate_seg
  */
 void analyze_segments(char* sample_segment, char** candidate_segments, int number_of_candidates, char* output_string)
 {
-  /* Some helpful variables you might want to use */
-  int* scores = NULL;
-  int sample_length = 0;
-  int candidate_length = 0;
   int i;
   int has_perfect_match = 0;
   int score = 0;
@@ -254,25 +238,11 @@ void analyze_segments(char* sample_segment, char** candidate_segments, int numbe
   char int_buffer[BUFSIZE];
   char score_buffer[BUFSIZE];
 
-  /* Hint: Check to see if any candidate segment(s) are a perfect match, and report them
-     (REMEMBER: don't ignore trailing nucleotides when searching for a perfect score)
-     Report the result by concatenating to output_string using the strcat(...) function.
-     See the comments above this function for the output string format for each line
-     Use sprintf(char * str, const char * format, ...) to convert an integer into string
-     which can then be concatenated using strcat(...) 
-     e.g. sprintf(int_buffer, "%d", i);
-          strcat(outputline_buffer, "Candidate number ");
-          strcat(outputline_buffer, int_buffer);
-          strcat(outputline_buffer, " is a perfect match\n");*/     
-
-  // Insert your code here
-
-  /* Hint: Return early if we have found and reported perfect match(es) */
   
   for(i = 0; i <  number_of_candidates; i++){
     if(strcmp(sample_segment, candidate_segments[i])==0){
       sprintf(int_buffer, "%d", i+1);
-      strcat(outputline_buffer, "Candidate number ");
+      sprintf(outputline_buffer, "Candidate number ");
       strcat(outputline_buffer, int_buffer);
       strcat(outputline_buffer, " is a perfect match\n");
       strcat(output_string, outputline_buffer);
@@ -285,24 +255,18 @@ void analyze_segments(char* sample_segment, char** candidate_segments, int numbe
   }
 
 
-  /* Hint: Otherwise we need to calculate and print all of the scores by invoking
-     calculate_score for each candidate_segment. Write an output line for each
-     candidate_segment and concatenate your line to output_string.
-     Don't forget to clear your outputline_buffer for each new line*/
   for (i = 0; i < number_of_candidates; i++) {
     score = calculate_score(sample_segment, candidate_segments[i]);
-    printf("Candidate number %d matched with a best score of %d\n", i+1, score);
     sprintf(int_buffer, "%d", i+1);
     sprintf(score_buffer, "%d", score);
-    strcat(outputline_buffer, "Candidate number ");
+    sprintf(outputline_buffer, "Candidate number ");
     strcat(outputline_buffer, int_buffer);
-    strcat(outputline_buffer, " matched with a best score of ");
+    strcat(outputline_buffer, " matches with a score of ");
     strcat(outputline_buffer, score_buffer);
     strcat(outputline_buffer, "\n");
     strcat(output_string, outputline_buffer);
   }
 
-  /* End of function */
   return;
 }
 
@@ -355,7 +319,7 @@ int calculate_score(char* sample_segment, char* candidate_segment)
   int candidate_length = strlen(candidate_segment);
   int sample_length_in_codons = sample_length / 3;
 
-  for(int offset=0; offset< candidate_length - sample_length; offset+=3){
+  for(int offset=0; offset < candidate_length - sample_length; offset+=3){
 
     char* sample_ptr = sample_segment;
     char* cand = candidate_segment+offset;
@@ -396,6 +360,7 @@ int calculate_score(char* sample_segment, char* candidate_segment)
 
       score+= temp_score;
       sample_ptr += 3;
+      cand += 3;
     }
 
     if(score > maxScore)
