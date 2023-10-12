@@ -350,49 +350,56 @@ int calculate_score(char* sample_segment, char* candidate_segment)
   /* Some helpful variables you might (or might not) want to use */
   int temp_score = 0;
   int score = 0;
-  int iterations = 0;
+  int maxScore = 0;
   int sample_length = strlen(sample_segment);
   int candidate_length = strlen(candidate_segment);
   int sample_length_in_codons = sample_length / 3;
-  char* codon1;
-  char* condon2;
 
-  for(int i = 0; i < sample_length_in_codons; i++){ //codon counter
-    temp_score=0;
+  for(int offset=0; offset< candidate_length - sample_length; offset+=3){
 
-    if(strncmp(sample_segment, candidate_segment, 3)==0)  //Check for full match
-      temp_score = 10;
+    char* sample_ptr = sample_segment;
+    char* cand = candidate_segment+offset;
+    score = 0;
+
+    for(int i = 0; i < sample_length_in_codons; i++){ //codon counter
+      temp_score=0;
+
+      if(strncmp(sample_ptr, cand, 3)==0)  //Check for full match
+        temp_score = 10;
     
-    else{
-      char* amino1 = getAmino(sample_segment);  //Check for amino type match
-      char* amino2 = getAmino(candidate_segment);
-
-      if(strcmp(amino1, amino2)==0)
-        temp_score = 5;
-      
       else{
-        for(int j = 0; j < 3; j++){
-          if(sample_segment[j]==candidate_segment[j])
-            temp_score+=2;
+        char* amino1 = getAmino(sample_ptr);  //Check for amino type match
+        char* amino2 = getAmino(cand);
 
-          else if ((sample_segment[j]=='A')&&(candidate_segment[j]=='T'))
-            temp_score+=1;
+        if(strcmp(amino1, amino2)==0)
+          temp_score = 5;
+      
+        else{
+          for(int j = 0; j < 3; j++){
+            if(sample_ptr[j]==cand[j])
+              temp_score+=2;
 
-          else if ((sample_segment[j]=='T')&&(candidate_segment[j]=='A'))
-            temp_score+=1;
+            else if ((sample_ptr[j]=='A')&&(cand[j]=='T'))
+              temp_score+=1;
+
+            else if ((sample_ptr[j]=='T')&&(cand[j]=='A'))
+              temp_score+=1;
           
-          else if ((sample_segment[j]=='C')&&(candidate_segment[j]=='G'))
-            temp_score+=1;
+            else if ((sample_ptr[j]=='C')&&(cand[j]=='G'))
+              temp_score+=1;
 
-          else if ((sample_segment[j]=='G')&&(candidate_segment[j]=='C'))
-            temp_score+=1;          
+            else if ((sample_ptr[j]=='G')&&(cand[j]=='C'))
+              temp_score+=1;          
+          }
         }
       }
+
+      score+= temp_score;
+      sample_ptr += 3;
     }
 
-    score += temp_score;
-    sample_segment+=3;
-    candidate_segment+=3;
+    if(score > maxScore)
+      maxScore = score;
   }
-  return score;
+  return maxScore;
 }
