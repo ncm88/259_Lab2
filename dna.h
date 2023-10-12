@@ -8,7 +8,6 @@
 #define CODON_NAME_LENGTH   14
 #define NUMBER_OF_CODONS    64
 
-  /* Insert function prototypes here */
 
 int    is_base_pair(char nucleotide_1, char nucleotide_2);
 int    get_codon_index(char* codon_code);
@@ -16,8 +15,6 @@ int    extract_dna(FILE* file_pointer, char** sample_segment, char*** candidate_
 void   analyze_segments(char* sample_segment, char** candidate_segments, int number_of_candidates, char* output_string);
 int    calculate_score(char* sample_segment, char* candidate_segment);
 
-/* The following two arrays are declared as two-dimensional char arrays,
-   but it is better to think about these as one-dimensional arrays of C strings */
 
 static char codon_codes[NUMBER_OF_CODONS][CODON_SYMBOL_LENGTH] =
 { "TTT", "TTC", "TTA", "TTG", "CTT", "CTC",
