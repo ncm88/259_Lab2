@@ -6,10 +6,10 @@
               specified sample.  The formatted DNA
               sequence file is a txt file (threes samples
               are provided in the Resource Files folder).
- Author:			Your names
- Student #s:	12345678 and 12345678
- CWLs:	      cwl1 and cwl2
- Date:				Add the date here
+ Author:			Nolan McCleary
+ Student #s:	33634312
+ CWLs:	      ncm88
+ Date:				Oct 12, 2023
  */
 
  /******************************************************************
@@ -247,7 +247,7 @@ void analyze_segments(char* sample_segment, char** candidate_segments, int numbe
   int* scores = NULL;
   int sample_length = 0;
   int candidate_length = 0;
-  int i = 0;
+  int i;
   int has_perfect_match = 0;
   int score = 0;
   char outputline_buffer[BUFSIZE] = "\0";
@@ -267,16 +267,24 @@ void analyze_segments(char* sample_segment, char** candidate_segments, int numbe
   // Insert your code here
 
   /* Hint: Return early if we have found and reported perfect match(es) */
+  
+  for(i = 0; i <  number_of_candidates; i++){
+    if(strcmp(sample_segment, candidate_segments[i])==0){
+      printf("Candidate number %d is a perfect match\n", i+1);
+    }
+    has_perfect_match+=1;
+  }
 
-  // Insert your code here
+  if(has_perfect_match>0)
+    return;
 
   /* Hint: Otherwise we need to calculate and print all of the scores by invoking
      calculate_score for each candidate_segment. Write an output line for each
      candidate_segment and concatenate your line to output_string.
      Don't forget to clear your outputline_buffer for each new line*/
-  for (i = 0; i < number_of_candidates; ++i) {
-
-    // Insert your code here - maybe a call to calculate_score?
+  for (i = 0; i < number_of_candidates; i++) {
+    score = calculate_score(sample_segment, candidate_segments[i]);
+    printf("Candidate number %d matched with a best score of %d\n", i+1, score);
   }
 
   /* End of function */
@@ -368,5 +376,5 @@ int calculate_score(char* sample_segment, char* candidate_segment)
     sample_segment+=3;
     candidate_segment+=3;
   }
-  return 0;
+  return score;
 }
